@@ -9,24 +9,25 @@ if "service_started" not in st.session_state:
     st.session_state.index = False
     st.session_state.rounds = False
 
+
 def start_service() -> None:
-    """_summary_
-    """
+    """_summary_"""
     st.session_state.index = True
     st.session_state.service_started = True
     return
 
+
 def enter_rounds() -> None:
-    """_summary_
-    """
+    """_summary_"""
     # rounds 페이지의 유형은 5가지이다.
     # ["choice", "problem", "solve", "story", "ending"]
     st.session_state.index = False
     st.session_state.rounds = "choice"
     return
 
+
 if st.button("SERVICE START!"):
-        start_service()
+    start_service()
 
 if "service_started" in st.session_state:
     if st.session_state.index:
@@ -34,7 +35,7 @@ if "service_started" in st.session_state:
 
         if st.button("ENTER ROUNDS"):
             enter_rounds()
-    
+
     if st.session_state.rounds:
         round_type = st.session_state.rounds
         if round_type == "choice":

@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def switch_page(page_name: str):
     """_summary_
 
@@ -18,7 +19,7 @@ def switch_page(page_name: str):
 
     def standardize_name(name: str) -> str:
         return name.lower().replace("_", " ")
-    
+
     page_name = standardize_name(page_name)
 
     pages = get_pages("navigator.py")  # OR whatever your main page is called
@@ -32,7 +33,9 @@ def switch_page(page_name: str):
                 )
             )
 
-    page_names = [standardize_name(config.get("page_name", "")) for config in pages.values()]
+    page_names = [
+        standardize_name(config.get("page_name", "")) for config in pages.values()
+    ]
 
     raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
 
