@@ -1,11 +1,16 @@
 import streamlit as st
+import datetime
 
 
 def switch_page(page_name: str):
-    """_summary_
-
+    """
+    streamlit의 multipage간의 이동을
+    사이드 바가 아닌 버튼 등으로 이용하기 위한 함수입니다.
+    streamlit run으로 실행되는 main app의 이름은 page 변수에 저장 되며,
+    main app을 교체할시 같이 바꾸어야 합니다.
+    이동할 페이지 파일들은 main app과 같은 위치에 있는 pages 디렉토리에 존재해야 합니다.
     Args:
-        page_name (str): _description_
+        page_name (str): 이동할 페이지 이름(.py 빼고)
 
     Raises:
         RerunException: _description_
@@ -18,6 +23,15 @@ def switch_page(page_name: str):
     from streamlit.source_util import get_pages
 
     def standardize_name(name: str) -> str:
+        """
+        switch_page에서 입력받은 page_name을 정규화 하기 위한 함수입니다.
+        _를 \\s 로 교체 후 소문자로 바꾸어 반환합니다.
+        Args:
+            name (str): switch_page 함수의 page_name argument
+
+        Returns:
+            str: 정규화된 page_name
+        """
         return name.lower().replace("_", " ")
 
     page_name = standardize_name(page_name)
@@ -40,7 +54,11 @@ def switch_page(page_name: str):
     raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
 
 
-def show_sidebar():
+def show_sidebar() -> None:
+    """
+    설정 및 분석 페이지로 이동하기 위해 사용되는
+    사이드바를 불러옵니다.
+    """
     with st.sidebar:
         if st.button("user"):
             switch_page("user")
@@ -48,3 +66,34 @@ def show_sidebar():
             switch_page("user_analysis")
         if st.button("settings"):
             switch_page("settings")
+
+
+def start_service() -> None:
+    """
+    stateful한 웹사이트를 위해 session_state에 저장할 변수를 초기화 하기위한 함수입니다.
+    """
+    if "service_started" not in st.session_state:
+        st.session_state.service_started = True
+        st.session_state.count = 0
+        st.session_state.last_updated = datetime.time(0, 0)
+        st.session_state.celsius = 50.0
+
+
+def increment_counter(increment_value: int = 1) -> None:
+    """
+    statefulness를 확인하기 위한 예시 함수입니다.
+    session_state의 count 값을 변화시킵니다.
+
+    Args:
+        increment_value (int): count에 더해질 값. Defaults to 1.
+    """
+    st.session_state.count += increment_value
+
+
+def update_counter() -> None:
+    """
+    statefulness를 확인하기 위한 예시 함수입니다.
+    session_state의 count, last_updated 값들을 변화시킵니다.
+    """
+    st.session_state.count += st.session_state.increment_value
+    st.session_state.last_updated = st.session_state.update_time
