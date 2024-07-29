@@ -1,20 +1,15 @@
-import os
+import os, re
 from dotenv import load_dotenv
-from langchain.chains import LLMChain
-from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-import re
 
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-llm = ChatOpenAI(api_key=OPENAI_API_KEY, model_name="gpt-4o-mini")
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 
 def load_prompt(file_path):
@@ -25,8 +20,8 @@ def load_prompt(file_path):
 
 prompt_path = "prompts/generate_question.prompt"
 system_prompt = load_prompt(prompt_path)
-custom_prompt = ChatPromptTemplate(
-    messages=[
+custom_prompt = ChatPromptTemplate.from_messages(
+    [
         SystemMessagePromptTemplate.from_template(system_prompt),
         HumanMessagePromptTemplate.from_template(
             "{first_story}, {second_story}, {select}"
@@ -37,14 +32,15 @@ first_story = "옛날 어느 곳에 한 평민이 살았는데 산의 정기를 
 second_story = "얼마후 관군이 와서 아기장수를 내놓으라고 하여 이미 부모가 죽었다고 하니 무덤을 가르쳐 달라고 하는 것을 그 어머니가 실토하여 가 보았더니 콩은 말이 되고 팥은 군사가 되어 아기장수가 막 일어나려고 하고 있었다. 그러나 그만 관군에게 들켜서 성공 직전에 죽임을 당하였다."
 select = "false"
 
-chain = LLMChain(llm=llm, prompt=custom_prompt, verbose=True)
-result = chain(
+chain = custom_prompt | llm
+result = chain.invoke(
     {"first_story": first_story, "second_story": second_story, "select": select}
 )
 
 pattern = r"\((.*?)\)"
-options = re.findall(pattern, result["text"])
+options = re.findall(pattern, result.content)
+print(options)
 first_option, second_option = options[-2], options[-1]
-print(result["text"])
+print(result.content)
 print(first_option)
 print(second_option)
