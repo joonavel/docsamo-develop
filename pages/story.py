@@ -1,6 +1,12 @@
 import streamlit as st
 import datetime
-from utils import switch_page, show_sidebar, increment_counter, update_counter
+from utils import (
+    switch_page,
+    show_sidebar,
+    increment_counter,
+    update_counter,
+    show_menu,
+)
 
 st.set_page_config("story page.")
 print("story session state:", st.session_state)
@@ -57,4 +63,4 @@ if st.button("problem"):
 if st.button("choice"):
     switch_page("choice")
 
-show_sidebar()
+show_menu(st.session_state.prev_page, st.session_state.game_page)
