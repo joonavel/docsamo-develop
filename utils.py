@@ -1,6 +1,6 @@
 import streamlit as st
 import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 def switch_page(page_name: str):
@@ -121,6 +121,27 @@ def show_menu(
 
         if st.button("4. 설정"):
             switch_page("settings")
+
+
+def show_user_data(
+    images: List[str], border: bool = False, height: Optional[int] = None
+) -> None:
+    """
+    st.siderbar.container()를 이용해 사이드 바의 독립된 공간에
+    사용자의 풀이 기록을 분석한 결과를 보여주는 공간을 생성하는 함수입니다.
+    height를 지정하여 일정 길이 이상이 되면 스크롤이 되도록 할 수 있습니다.
+    border를 True로 두어 공간을 테두리로 감쌀 수 있습니다.
+
+    Args:
+        images (List[str]): _description_
+        border (bool, optional): _description_. Defaults to False.
+        height (Optional[int], optional): _description_. Defaults to None.
+    """
+    with st.sidebar.container(border=border, height=height):
+        st.header("사용자 데이터 분석")
+        st.write("분석 결과")
+        st.image(images[0], caption="강점")
+        st.image(images[1], caption="약점")
 
 
 def increment_counter(increment_value: int = 1) -> None:

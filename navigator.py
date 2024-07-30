@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import switch_page, start_service, show_menu
+from utils import switch_page, start_service, show_menu, show_user_data
 
 
 # session_state 값 초기화
@@ -11,23 +11,13 @@ st.write("Here is Temporary Home")
 if st.button("Choice"):
     switch_page("choice")
 
-# show_sidebar()
-
-# with st.sidebar.container():
-#     st.write("2번 공간")
-
-# with st.sidebar.container():
-#     st.write("3번 공간")
 
 show_menu(prev_page="", current_page=st.session_state.game_page)
 
 # Section 2
-st.sidebar.divider()
-with st.sidebar.container(height=450):
-    st.header("사용자 데이터 분석")
-    st.write("분석 결과")
-    st.image("https://via.placeholder.com/150", caption="강점")
-    st.image("https://via.placeholder.com/150", caption="약점")
+show_user_data(
+    ["https://via.placeholder.com/150", "https://via.placeholder.com/150"], True, 450
+)
 
 # Section 3
 st.sidebar.divider()
