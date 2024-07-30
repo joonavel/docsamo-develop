@@ -1,5 +1,6 @@
 import streamlit as st
 import datetime
+from typing import Optional
 
 
 def switch_page(page_name: str):
@@ -9,6 +10,7 @@ def switch_page(page_name: str):
     streamlit run으로 실행되는 main app의 이름은 page 변수에 저장 되며,
     main app을 교체할시 같이 바꾸어야 합니다.
     이동할 페이지 파일들은 main app과 같은 위치에 있는 pages 디렉토리에 존재해야 합니다.
+    함수 작동 시, st.session_state.prev_page가 자동 갱신 됩니다.
     Args:
         page_name (str): 이동할 페이지 이름(.py 빼고)
 
@@ -40,6 +42,7 @@ def switch_page(page_name: str):
 
     for page_hash, config in pages.items():
         if standardize_name(config.get("page_name", "")) == page_name:
+            st.session_state.prev_page = st.session_state.game_page
             raise RerunException(
                 RerunData(
                     page_script_hash=page_hash,
@@ -77,6 +80,47 @@ def start_service() -> None:
         st.session_state.count = 0
         st.session_state.last_updated = datetime.time(0, 0)
         st.session_state.celsius = 50.0
+
+
+def show_menu(
+    prev_page: str,
+    current_page: str = "",
+    height: Optional[int] = None,
+    border: bool = False,
+) -> None:
+    """
+    st.siderbar.container()를 이용해 사이드 바의 독립된 공간에
+    페이지 이동, 지난 대화 보기, 설정 페이지 이동 버튼을 생성하는 함수입니다.
+    height를 지정하여 일정 길이 이상이 되면 스크롤이 되도록 할 수 있습니다.
+    border를 True로 두어 공간을 테두리로 감쌀 수 있습니다.
+
+    Args:
+        prev_page (str): _description_
+        current_page (str, optional): _description_. Defaults to "".
+        height (Optional[int], optional): _description_. Defaults to None.
+        border (bool, optional): _description_. Defaults to False.
+    """
+    in_game_list = set(["story", "problem", "solve", "ending"])
+    page_name_mapper = {
+        "story": "이야기 진행",
+        "problem": "문제",
+        "solve": "결과",
+        "ending": "라운드 엔딩",
+        "choice": "라운드 선택",
+    }
+    with st.sidebar.container(border=border, height=height):
+        st.header("메뉴")
+        if st.button("1. 메인 화면으로 이동"):
+            switch_page("navigator")
+
+        if current_page in in_game_list:
+            if st.button(f"2. 이전 ({page_name_mapper[prev_page]}) 화면으로 이동"):
+                switch_page(prev_page)
+
+            st.button("3. 지난 대화 보기")
+
+        if st.button("4. 설정"):
+            switch_page("settings")
 
 
 def increment_counter(increment_value: int = 1) -> None:

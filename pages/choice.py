@@ -6,6 +6,7 @@ from utils import (
     increment_counter,
     update_counter,
     start_service,
+    show_menu,
 )
 
 st.set_page_config("choice page.")
@@ -65,4 +66,4 @@ if st.button("Temporary Home"):
 if st.button("story"):
     switch_page("story")
 
-show_sidebar()
+show_menu(st.session_state.prev_page, st.session_state.game_page)
