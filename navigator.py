@@ -1,5 +1,11 @@
 import streamlit as st
-from utils import switch_page, start_service, show_menu, show_user_data
+from utils import (
+    switch_page,
+    start_service,
+    show_menu,
+    show_user_data,
+    show_user_status,
+)
 
 
 # session_state 값 초기화
@@ -11,8 +17,8 @@ st.write("Here is Temporary Home")
 if st.button("Choice"):
     switch_page("choice")
 
-
-show_menu(prev_page="", current_page=st.session_state.game_page)
+# Section 1
+show_menu(prev_page="", current_page=st.session_state.game_page, border=True)
 
 # Section 2
 show_user_data(
@@ -20,8 +26,4 @@ show_user_data(
 )
 
 # Section 3
-st.sidebar.divider()
-with st.sidebar.container():
-    st.header("사용자 정보")
-    st.write("사용자: 닉네임")
-    st.write("마지막 진행 상황")
+show_user_status("강호준", "solve", border=True)

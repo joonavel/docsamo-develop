@@ -144,6 +144,27 @@ def show_user_data(
         st.image(images[1], caption="약점")
 
 
+def show_user_status(
+    user_name: str, page_name: str, border: bool = False, height: Optional[int] = None
+):
+    """
+    st.siderbar.container()를 이용해 사이드 바의 독립된 공간에
+    사용자의 진행 상황을 보여주는 공간을 생성하는 함수입니다.
+    height를 지정하여 일정 길이 이상이 되면 스크롤이 되도록 할 수 있습니다.
+    border를 True로 두어 공간을 테두리로 감쌀 수 있습니다.
+
+    Args:
+        user_name (str): _description_
+        page_name (str): _description_
+        border (bool, optional): _description_. Defaults to False.
+        height (Optional[int], optional): _description_. Defaults to None.
+    """
+    with st.sidebar.container(border=border, height=height):
+        st.header("사용자 정보")
+        st.write(f"사용자: {user_name}")
+        st.write(f"마지막 진행 상황: {page_name}")
+
+
 def increment_counter(increment_value: int = 1) -> None:
     """
     statefulness를 확인하기 위한 예시 함수입니다.
