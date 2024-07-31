@@ -1,4 +1,4 @@
-import os
+import os, re
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
@@ -7,9 +7,7 @@ from langchain_utils import generate_prompt
 
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-llm = ChatOpenAI(api_key=OPENAI_API_KEY, model_name="gpt-4o-mini")
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 prompt_path = "prompts/generate_question.prompt"
 prompt = generate_prompt(prompt_path, "{first_story}, {second_story}, {select}")
