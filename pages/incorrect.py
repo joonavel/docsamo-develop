@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain_utils import generate_prompt
 from langchain.chains import LLMChain
-
+from utils import switch_page
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -26,3 +26,6 @@ chain = LLMChain(llm=llm, prompt=prompt, verbose=True)
 result = chain({"question": question, "answer": answer})
 
 st.write(result["text"])
+
+if st.button("다시 한번 풀어보기"):
+    switch_page("generate_question")

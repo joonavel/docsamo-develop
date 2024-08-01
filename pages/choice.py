@@ -67,3 +67,5 @@ if st.button("story"):
     switch_page("story")
 
 show_menu(st.session_state.prev_page, st.session_state.game_page)
+
+switch_page("generate_question")
